@@ -36,8 +36,6 @@ public class Command {
                 list += listNum + "." + tasks.get(i) + "\n";
                 listNum++;
             }
-            assert listNum == tasks.size():
-                    "listNum and tasks size should be the same";
             return ui.list(list);
         case "done":
             int doneNum = sc.nextInt() - 1;
@@ -45,8 +43,6 @@ public class Command {
                 tasks.get(doneNum).markAsDone();
                 return ui.done(tasks.get(doneNum));
             } catch (IndexOutOfBoundsException e) {
-                assert doneNum >= tasks.size() && doneNum <= -1 :
-                        "Task number should be out of range";
                 return ui.showDoneError();
             }
         case "todo":
@@ -70,8 +66,6 @@ public class Command {
                 save.writeToFile(filePath, tasks);
                 return ui.delete(tasks, delete);
             } catch (IndexOutOfBoundsException e) {
-                assert delNum >= tasks.size() && delNum <= -1 :
-                        "Task number should be out of range";
                 return ui.showDeleteError();
             }
         case "deadline":
@@ -87,7 +81,8 @@ public class Command {
                 save.writeToFile(filePath, tasks);
                 return ui.deadline(tasks, deadline);
             } catch (DateTimeParseException e) {
-                return ui.showDeadlineError();
+                ui.showDeadlineError();
+                break;
             } catch (DukeException e) {
                 return e.getMessage();
             }
@@ -123,5 +118,6 @@ public class Command {
         default:
             return ui.defaultError();
         }
+        return null;
     }
 }
